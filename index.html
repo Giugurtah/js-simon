@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/index.css">
+    <title>Simon Says</title>
+</head>
+<body>
+    <!-- Sezione di selezione difficoltà e avvio gioco -->
+    <label for="difficulty_level">Inserire il numero di numeri con cui si vuole giocare</label>
+    <input type="number" name="difficulty_level" id="difficulty_level" min="1" max="10" step="1" value="5">
+    <button id="generate_numbers">Genera numeri</button>
+
+    <!-- Sezione di stampa numeri ed avvio countdown -->
+    <p id="generated_numbers"></p>
+    <button id="start_countdown" class="hidden">Inizia il countdown</button>
+
+    <!-- Sezione di stampa del conto alla rovescia -->
+    <div id="countdown"></div>
+
+    <!-- Sezione di inserimento numeri -->
+    <div id="number_form" class="hidden">
+        <label for="submitted_numbers">Inserire i numeri distanziati da una virgola</label>
+        <input type="text" id="submitted_numbers">
+        <button id="submit_button">Invia numeri</button>
+    </div>
+
+
+
+    <script src="./js/index.js"></script>
+</body>
+</html>
