@@ -1,41 +1,76 @@
-//Variabili globali
+//*Variabili globali
+// Sezione di selezione difficoltà e avvio gioco
 const difficultyLevel = document.getElementById("difficulty_level");
 const generateNumbersButton = document.getElementById("generate_numbers");
+// Sezione di stampa numeri ed avvio countdown 
 const generatedNumbers = document.getElementById("generated_numbers");
 const startCountdownButton = document.getElementById("start_countdown");
+// Sezione di stampa del conto alla rovescia
 const countdown = document.getElementById("countdown");
+// Sezione di inserimento numeri
 const numberForm = document.getElementById("number_form");
 const submittedNumbers = document.getElementById("submitted_numbers");
 const submitButton = document.getElementById("submit_button");
+// Sezione di stampa punteggio finale
+const finalScore = document.getElementById("final_score");
+const resetButton = document.getElementById("reset");
+// Variabili numeriche
 let randomNumbers = [];
+let points = 0;
+
 
 generateNumbersButton.addEventListener ("click", function(){
-    //Al click del bottone generate_numbers viene riempito l'array con quanti numeri scelti dall'utente e vengono poi stampati
+    //Genero i numeri tramite funzione
     randomNumbersGenerator(randomNumbers, parseInt(difficultyLevel.value));
+    //Stampo i numeri e compare il bottone di avvio countdown
     generatedNumbers.innerText = "I numeri generati sono: " + randomNumbers;
+    generateNumbersButton.classList.add("hidden");
     startCountdownButton.classList.remove("hidden");
 });
 
 startCountdownButton.addEventListener ("click", function(){
-    //Al click del bottone start_countdown vengono rimossi i numeri e il bottone stesso, e parte il conto alla rovescia
+    //Nascondo i numeri e il pulsante stesso
+    const startingTime = 2; //Il tempo iniziale viene dichiarato nel codice, ma potrebbe essere anche inserito dall'utente tramite input
     generatedNumbers.innerText = "";
     this.classList.add("hidden");
-    countdownFunction(countdown, 5, 10);
+
+    //Tramite funzione faccio partire il countdown
+    countdownFunction(countdown, startingTime, 10);
+    //Al termine del tempo specificato nascondo la sezione di countdown e faccio apparire il form per inserire i numeri
     setTimeout(function(){
         countdown.innerText = "Il tempo è finito!!!"
         numberForm.classList.remove("hidden");
-    }, 5*1000);
+    }, startingTime*1000);
 })
 
 
 submitButton.addEventListener ("click", function(){
-    const submittedNumbersArray = submittedNumbers.value.split(",");
-    for (var i=0; i<submittedNumbersArray.length; i++) {
-        if (randomNumbers.includes(submittedNumbersArray[i])) {
-            
+    //Prendo i numeri e li divido in un array
+    const submittedNumbersAux = submittedNumbers.value.split(",");
+    for (var i=0; i<submittedNumbersAux.length; i++) {
+        //Controllo se i valori inseriti fanno parte dell'array di numeri generati dal codice e conto i punti
+        if (randomNumbers.includes(parseInt(submittedNumbersAux[i]))) {
+            points++;
         }
     }
-    console.table(submittedNumbersArray);
+
+    //Calcolato il punteggio finale lo stampo e nascondo il form di inserimento numeri
+    finalScore.innerText = "I numeri inseriti sono " + submittedNumbersAux + " ed i numeri generati dal gioco sono " + randomNumbers + " quindi hai totalizzato " + points + " punti";
+    numberForm.classList.add("hidden");
+    countdown.innerText = "";
+    resetButton.classList.remove("hidden");
+})
+
+resetButton.addEventListener ("click", function(){
+    //Azzero, nascondo e mostro vari elementi per resettare la partita
+    difficultyLevel.value = "5";
+    submittedNumbers.value = "";
+    submittedNumbersArray = [];
+    generateNumbersButton.classList.remove("hidden");
+    randomNumbers = [];
+    points = 0;
+    finalScore.innerText = "";
+    resetButton.classList.add("hidden");
 })
 
 function randomNumbersGenerator (array, number) {
@@ -50,10 +85,10 @@ function randomNumbersGenerator (array, number) {
 }
 
 function countdownFunction (element, number_beginning, number_steps) {
-    //Funzione che chiede un elemento in cui stampare il countdown, i secondi iniziali e gli steps (espressi in centesimi di secondi) di cui si vogliono mostrare le variazioni
+    //Funzione che chiede un elemento in cui stampare il countdown, i secondi iniziali e gli steps (espressi in centesimi di secondi)
     element.innerText = number_beginning.toFixed(2);
     const clock = setInterval(function(){
-        //Partendo dal valore inziale, ad ogni step viene sovrascritto l'elemento con il tempo diminuito
+        //Partendo dal valore inziale, ad ogni step l'elemento viene sovrascritto con il tempo diminuito
         number_beginning -= number_steps*(0.01);
         element.innerText = number_beginning.toFixed(2);
     }, number_steps*10);
